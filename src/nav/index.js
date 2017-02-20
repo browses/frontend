@@ -1,4 +1,5 @@
 import { h } from "hyperapp";
+import './index.scss';
 export default ({user, extensionURL}) =>
   <nav>
     <a className='icon' href='/'>
