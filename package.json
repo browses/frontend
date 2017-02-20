@@ -1,0 +1,33 @@
+{
+  "name": "lean-rollup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "serve": "http-server-spa build"
+  },
+  "author": "Luke Jackson <lukejacksonn@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-transform-react-jsx": "^6.23.0",
+    "babel-preset-es2015-rollup": "^1.2.0",
+    "http-server-spa": "^1.2.0",
+    "postcss-nested": "^1.0.0",
+    "rollup": "^0.36.3",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-jsx": "^1.0.3",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-postcss": "^0.2.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-watch": "^2.5.0"
+  },
+  "dependencies": {
+    "fb-sdk": "^1.0.3",
+    "firebase": "^3.5.2",
+    "hyperapp": "^0.4.2",
+    "ramda": "^0.23.0"
+  }
+}

@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+head,
+script,
+style,
+svg#sheet {
+  display: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+html {
+  font-size: calc(10px + 1vmin);
+  font-family: sans-serif;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  .icon svg {
+    width: 2rem;
+    height: 2rem;
+  }
+  .user {
+    display: flex;
+    align-items: center;
+    > *+* { margin-left: 1rem; }
+    name- {
+      font-size: 1.38rem;
+    }
+    avatar- {
+      width: 2.5rem;
+    }
+  }
+}
+
+header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  title- {
+    margin-bottom: 0;
+    font-size: calc(1rem + 5vw);
+    font-weight: bold;
+  }
+  wordmark- {
+    margin-top: 1.5rem;
+    font-size: calc(1rem + .5vw);
+    letter-spacing: .3rem;
+    color: rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+}
