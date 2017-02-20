@@ -11,8 +11,8 @@ import jsx from 'rollup-plugin-jsx';
 import nested from 'postcss-nested';
 
 export default {
-  entry: 'src/main.js',
-  dest: 'build/main.js',
+  entry: 'src/index.js',
+  dest: 'build/bundle.js',
   format: 'iife',
   sourceMap: 'inline',
   useStrict: false,
