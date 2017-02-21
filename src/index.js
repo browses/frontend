@@ -1,19 +1,8 @@
 import { h, app, router } from "hyperapp";
-import { getBrowsesUser, getLatestBrowses, putBrowseBrowser, putBrowseView, deleteBrowse } from './browse';
+import { getBrowsesUser, getLatestBrowses, putBrowseBrowser, putBrowseView, deleteBrowse, getPopularBrowses, getUserBrowses, Browse, getBrowses } from './browse';
 import './index.scss';
 
 import Nav from './nav';
-
-const timeSince = (date) => {
-  const z = (x, y) => x > 1 ? `${x} ${y}s` : `${x} ${y}`;
-  const x = Math.floor((new Date() - date) / 1000);
-  var i = Math.floor(x / 31536000); if (i >= 1) return z(i, 'year');
-  i = Math.floor(x / 2592000); if (i >= 1) return z(i, 'month');
-  i = Math.floor(x / 86400); if (i >= 1) return z(i, 'day');
-  i = Math.floor(x / 3600); if (i >= 1) return z(i, 'hour');
-  i = Math.floor(x / 60); if (i >= 1) return z(i, 'minute');
-  return z(Math.floor(x), 'second');
-}
 
 const removeDuplicatesBy = (keyFn, array) => {
   var mySet = new Set();
@@ -27,48 +16,32 @@ const removeDuplicatesBy = (keyFn, array) => {
 const model = {
   user: null,
   browses: [],
-  filter: 'Most Recent',
-  extensionURL: 'https://chrome.google.com/webstore/detail/browses/fpijpjkcpkhbkeiinkphbiaapekmfgdo',
+  filter: 0,
+  filters: ['Most Recent', 'Most Popular'],
 }
 
-const view = (model, actions) =>
+const template = (model, actions, params) =>
   <app->
-    <Nav user={model.user} extensionURL={model.extensionURL} />
+    <Nav user={model.user} actions={actions} />
     <header>
-      <title->{model.filter}</title->
+      <title->{
+        model.filters[model.filter] ||
+        (model.browses[0] ? model.browses[0].name : '')
+      }</title->
       <wordmark->BROWSES</wordmark->
     </header>
-    <browses->{model.browses.map(({
-        image,url,browser,title,browsers={},published,uid,key
-      }) =>
-      <browse->
-        <a href={url} target='_blank'>
-          <screenshot- onClick={e => actions.logView(key)} style={{ backgroundImage: `url(${image})` }}></screenshot->
-        </a>
-        <meta->
-          <a href={'/' + browser}>
-            <img className='avatar' src={`https://graph.facebook.com/${browser}/picture?type=square`} />
-          </a>
-          <col->
-            <title->{title}</title->
-            <row->
-              <browsers->{ Object.keys(browsers).map(id =>
-                <a href={'/' + id}>
-                  <img src={`https://graph.facebook.com/${id}/picture?type=square`} />
-                </a>
-              )}</browsers->
-              <time->{timeSince(published) + ' ago'}</time->
-            </row->
-          </col->
-          { model.user && model.user.fbid === browser ?
-            <button className='delete' onClick={e => actions.logRemove(key)}>x</button> : ''
-          }
-        </meta->
-      </browse->
-    )}</browses->
+    <browses->{model.browses.map(x =>
+      <Browse user={model.user} browse={x} actions={actions} />)}
+    </browses->
   </app->
 
+const view = {
+  '/': template,
+  '/:uid': template,
+}
+
 const update = {
+  clearBrowses: (model, value) => ({ browses: [] }),
   removeBrowse: (model, value) => ({
     browses: model.browses.filter(
       x => x.key !== value
@@ -85,17 +58,24 @@ const update = {
   addBrowse: (model, value) => ({
     browses: removeDuplicatesBy(x => x.key,
     model.browses.concat(value).sort((a, b) => {
-      if (a.published > b.published) return -1;
-      if (a.published < b.published) return 1;
-      return 0;
+      if(model.filter === 1) {
+        if (a.views > b.views) return -1;
+        if (a.views < b.views) return 1;
+        return 0;
+      } else {
+        if (a.published > b.published) return -1;
+        if (a.published < b.published) return 1;
+        return 0;
+      }
     }))
   }),
   setUser: (model, value) => ({ user: value }),
+  setFilter: (model, value) => ({ filter: value }),
 }
 
 const effects = {
   fetchBrowses: (model, actions) =>
-    getLatestBrowses([...model.browses].pop())
+    getBrowses(model.filter, [...model.browses].pop())
     .then(browses => browses.forEach(b =>
       actions.addBrowse(b.val())
     )),
@@ -108,6 +88,11 @@ const effects = {
     deleteBrowse(model.user.uid, data)
     .then(browse => actions.removeBrowse(data))
   },
+  changeFilter: (model, actions, data) => {
+    actions.clearBrowses();
+    actions.setFilter(data);
+    actions.fetchBrowses();
+  },
 }
 
 const subscriptions = [
@@ -119,11 +104,18 @@ const subscriptions = [
       uid: user.uid,
       fbid: user.providerData[0].uid,
     })),
-  (model, actions) =>
-    getLatestBrowses()
+  (model, actions) => {
+    const path = window.location.pathname.replace('/','');
+    let topic;
+    if(path === '' || path === 'recent') topic = 0;
+    else if(path === 'popular') topic = 1;
+    else topic = path;
+    actions.setFilter(topic);
+    getBrowses(topic, [...model.browses].pop())
     .then(browses => browses.forEach(browse => {
       actions.addBrowse(browse.val());
-    })),
+    }));
+  },
   (model, actions) =>
     window.onscroll = (e) => {
       if(document.body.scrollTop > 0
@@ -131,7 +123,7 @@ const subscriptions = [
         >= document.body.scrollHeight) {
         actions.fetchBrowses();
       }
-    }
+    },
 ]
 
 const hooks = {

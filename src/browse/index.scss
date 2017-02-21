@@ -55,6 +55,11 @@ browse- {
 
   .delete {
     padding: 1rem;
+    background: transparent;
+    opacity: 0.2;
+    &:hover {
+      opacity: 0.5;
+    }
   }
 
   browsers- {

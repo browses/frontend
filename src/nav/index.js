@@ -1,19 +1,19 @@
 import { h } from "hyperapp";
 import './index.scss';
-export default ({user, extensionURL}) =>
+export default ({user, actions}) =>
   <nav>
-    <a className='icon' href='/'>
-      <svg>
-        <use xlinkHref="#i-browses-icon"></use>
-      </svg>
-    </a>
+    <row->
+      <img src='/icon.png' />
+      <a className='icon' href='/recent' onClick={e => actions.changeFilter(0)}>Recent</a>
+      <a className='icon' href='/popular' onClick={e => actions.changeFilter(1)}>Popular</a>
+    </row->
     { user ?
-      <a className='user' href={'/' + user.fbid}>
+      <a className='user' href={'/' + user.fbid} onClick={e => actions.changeFilter(user.fbid)}>
         <name->{user.displayName}</name->
         <avatar->
           <img src={user.photoURL} />
         </avatar->
       </a> :
-      <a href={extensionURL}>Install Extension</a>
+      <a href='https://chrome.google.com/webstore/detail/browses/fpijpjkcpkhbkeiinkphbiaapekmfgdo'>Install Extension</a>
     }
   </nav>
