@@ -135,7 +135,7 @@ export const Browse = ({user, browse, actions}) =>
       <col->
         <title->{browse.title}</title->
         <row->
-          <browsers->{ Object.keys(browse.browsers).map(id =>
+          <browsers->{ Object.keys(browse.browsers || {}).map(id =>
             <a href={'/' + id} onClick={e => actions.changeFilter(id)}>
               <img src={`https://graph.facebook.com/${id}/picture?type=square`} />
             </a>

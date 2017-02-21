@@ -3,9 +3,9 @@ import './index.scss';
 export default ({user, actions}) =>
   <nav>
     <row->
-      <img src='/icon.png' />
-      <a className='icon' href='/recent' onClick={e => actions.changeFilter(0)}>Recent</a>
-      <a className='icon' href='/popular' onClick={e => actions.changeFilter(1)}>Popular</a>
+      <a href='/' onClick={e => actions.changeFilter(0)}><img src='/icon.png' /></a>
+      <a href='/recent' onClick={e => actions.changeFilter(0)}>Recent</a>
+      <a href='/popular' onClick={e => actions.changeFilter(1)}>Popular</a>
     </row->
     { user ?
       <a className='user' href={'/' + user.fbid} onClick={e => actions.changeFilter(user.fbid)}>
