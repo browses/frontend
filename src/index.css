@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+head,
+script,
+style,
+svg#sheet {
+  display: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+html {
+  font-size: calc(10px + 1vmin);
+  font-family: sans-serif;
+  overflow-y: scroll;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  row- {
+    display: flex;
+    align-items: center;
+    > *+* { margin-left: 1rem; }
+  }
+  svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .user {
+    display: flex;
+    align-items: center;
+    > *+* { margin-left: 1rem; }
+    avatar- {
+      width: 2.5rem;
+    }
+  }
+}
+
+header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  title- {
+    margin-bottom: 0;
+    font-size: calc(1rem + 5vw);
+    font-weight: bold;
+  }
+  wordmark- {
+    margin-top: 1.5rem;
+    font-size: calc(1rem + .5vw);
+    letter-spacing: .3rem;
+    color: rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+}
+
+browses- {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > *+* { margin-top: 1rem; }
+}
+
+browse- {
+  position: relative;
+  width: 80%;
+
+  screenshot- {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: #f2f2f2;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      padding-top: 62%;
+      box-shadow: 0 1px 5px 1px rgba(0,0,0,0.2);
+    }
+  }
+
+  .avatar {
+    width: 3.6rem;
+  }
+
+  meta- {
+    display: flex;
+    > *+* { margin-left: 1rem; }
+    align-items: center;
+    padding: 2rem;
+  }
+
+  col- {
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: column;
+    > *+*:not(:empty) { margin-top: .5rem; }
+  }
+
+  row- {
+    display: flex;
+    align-items: center;
+    > *:not(:empty)+* { margin-left: .25rem; }
+  }
+
+  time- {
+    font-size: .62rem;
+    color: rgba(0,0,0,.5);
+  }
+
+  .delete {
+    padding: 1rem;
+    background: transparent;
+    opacity: 0.2;
+    &:hover {
+      opacity: 0.3;
+    }
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  browsers- {
+    display: flex;
+    > *+* { margin-left: .25rem; }
+    a {
+      width: 1rem;
+    }
+  }
+}

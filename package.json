@@ -1,34 +1,85 @@
 {
-  "name": "lean-rollup",
+  "name": "browses-web",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
-    "serve": "http-server-spa build"
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "watch": {
+    "index": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "html",
+      "quiet": true
+    },
+    "script": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js",
+      "quiet": true
+    },
+    "style": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "css",
+      "quiet": true
+    },
+    "serve": {
+      "patterns": [
+        "."
+      ],
+      "extensions": "json",
+      "quiet": true
+    }
   },
-  "author": "Luke Jackson <lukejacksonn@gmail.com>",
-  "license": "ISC",
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      [
+        "transform-react-jsx",
+        {
+          "pragma": "h"
+        }
+      ],
+      [
+        "transform-object-rest-spread"
+      ]
+    ]
+  },
+  "scripts": {
+    "make": "run(){ cp make/$1.js src/$1s/_$2.js; }; run",
+    "index": "copyfiles -f src/index.html dist",
+    "script": "browserify -t [ babelify ] src/app.js > dist/index.js",
+    "style": "node-sass -q src/index.css -o dist",
+    "build": "npm run index && npm run script && npm run style && npm run minify",
+    "serve": "http-server-spa dist",
+    "minify": "npm run uglifyjs && npm run uglifycss",
+    "uglifyjs": "uglifyjs --screw-ie8 -c -m -o dist/index.js -- dist/index.js",
+    "uglifycss": "echo `uglifycss dist/index.css` > dist/index.css",
+    "start": "npm run index && npm-watch"
+  },
+  "author": "Luke Jackson <lukejacksonn@gmail.com",
+  "license": "MIT",
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-react-jsx": "^6.23.0",
-    "babel-preset-es2015-rollup": "^1.2.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "copyfiles": "^1.2.0",
     "http-server-spa": "^1.2.0",
-    "postcss-nested": "^1.0.0",
-    "rollup": "^0.36.3",
-    "rollup-plugin-babel": "^2.6.1",
-    "rollup-plugin-commonjs": "^5.0.5",
-    "rollup-plugin-eslint": "^3.0.0",
-    "rollup-plugin-jsx": "^1.0.3",
-    "rollup-plugin-node-resolve": "^2.0.0",
-    "rollup-plugin-postcss": "^0.2.0",
-    "rollup-plugin-uglify": "^1.0.1",
-    "rollup-watch": "^2.5.0"
+    "node-sass": "^3.8.0",
+    "npm-watch": "^0.1.6",
+    "uglify-js": "^2.7.5",
+    "uglifycss": "0.0.25"
   },
   "dependencies": {
     "fb-sdk": "^1.0.3",
     "firebase": "^3.5.2",
-    "hyperapp": "^0.4.2",
-    "ramda": "^0.23.0"
+    "hyperapp": "^0.7.0"
   }
 }
