@@ -20,13 +20,7 @@ const removeDuplicatesBy = (keyFn, array) => {
   })
 }
 
-export const getBrowses = (filter, start) => {
-  if(filter === 0) return getLatestBrowses(start);
-  if(filter === 1) return getPopularBrowses(start);
-  return getUserBrowses(filter, start);
-}
-
-export const getUserBrowses = (id, start) => {
+const getUserBrowses = (id, start) => {
   const next = start && start.key;
   if (next) {
     return database.ref('browses')
@@ -43,7 +37,7 @@ export const getUserBrowses = (id, start) => {
   .once('value');
 }
 
-export const getLatestBrowses = start => {
+const getLatestBrowses = start => {
   const next = start && start.published;
   if (next) {
     return database.ref('browses')
@@ -53,22 +47,6 @@ export const getLatestBrowses = start => {
     .once('value');
   }
   return database.ref('browses')
-  .limitToLast(5)
-  .once('value');
-}
-
-export const getPopularBrowses = start => {
-  const views = start && start.views;
-  const next = start && start.key;
-  if (next) {
-    return database.ref('browses')
-    .orderByChild('views')
-    .endAt(views, next)
-    .limitToLast(5)
-    .once('value');
-  }
-  return database.ref('browses')
-  .orderByChild('views')
   .limitToLast(5)
   .once('value');
 }
@@ -95,22 +73,15 @@ export default (options) => ({
         const filter = m.browses.filter
         const start = [...m.browses.list].pop()
         if(filter === 0) return getLatestBrowses(start);
-        if(filter === 1) return getPopularBrowses(start);
         return getUserBrowses(filter, start);
       },
       add: (m,d) => ({
         browses: { ...m.browses,
           list: removeDuplicatesBy(x => x.key,
             m.browses.list.concat(d).sort((a, b) => {
-              if(m.browses.filter === 1) {
-                if (a.views > b.views) return -1;
-                if (a.views < b.views) return 1;
-                return 0;
-              } else {
-                if (a.published > b.published) return -1;
-                if (a.published < b.published) return 1;
-                return 0;
-              }
+              if (a.published > b.published) return -1;
+              if (a.published < b.published) return 1;
+              return 0;
             })),
         }}),
       remove: (m,d) => ({
