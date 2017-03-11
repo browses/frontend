@@ -13,6 +13,9 @@ export default ({m,a}) =>
           <img src={m.user.photoURL} />
         </avatar->
       </a> :
-      <a href='https://chrome.google.com/webstore/detail/browses/fpijpjkcpkhbkeiinkphbiaapekmfgdo'>Install Extension</a>
+      <button
+        className='install'
+        onclick={e => chrome.webstore.install('fpijpjkcpkhbkeiinkphbiaapekmfgdo')}
+      >+ Add to Chrome</button>
     }
   </nav>

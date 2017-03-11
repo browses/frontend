@@ -4,7 +4,7 @@ export default ({m,a}) =>
     <title->{
       m.browses.filters[m.browses.filter] ||
       (m.browses.list[0] ? m.browses.list[0].name :
-        '___________')
+        <span>___________</span>)
     }</title->
     <wordmark->BROWSES</wordmark->
   </header>

@@ -47,6 +47,12 @@ nav {
       width: 2.5rem;
     }
   }
+  .install {
+    padding: .68rem;
+    border: 1px solid rgba(0,0,0,.1);
+    background: #fff;
+    font-size: .68rem;
+  }
 }
 
 header {
@@ -67,6 +73,9 @@ header {
     letter-spacing: .3rem;
     color: rgba(0,0,0,0.5);
     font-weight: bold;
+  }
+  span {
+    color: rgba(0,0,0,.1);
   }
 }
 
