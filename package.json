@@ -32,22 +32,6 @@
       "quiet": true
     }
   },
-  "babel": {
-    "presets": [
-      "es2015-rollup"
-    ],
-    "plugins": [
-      [
-        "transform-react-jsx",
-        {
-          "pragma": "h"
-        }
-      ],
-      [
-        "transform-object-rest-spread"
-      ]
-    ]
-  },
   "scripts": {
     "make": "run(){ cp make/$1.js src/$1s/_$2.js; }; run",
     "index": "copyfiles -f src/index.html dist",

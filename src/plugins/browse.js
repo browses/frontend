@@ -1,4 +1,4 @@
-import { database } from '../helpers/fire'
+import { database } from '../helpers/firebase'
 export default () => ({
   actions: {
     browse: {

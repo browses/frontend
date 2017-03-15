@@ -3,15 +3,20 @@ import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 
 export default {
-  entry: 'src/app.js',
+  entry: 'src/index.js',
   dest: 'dist/index.js',
-  format: 'iife',
-  sourceMap: 'inline',
-  useStrict: false,
   plugins: [
     commonjs(),
     resolve({ jsnext: true }),
-    babel({ exclude: ['node_modules/**', 'src/**/*.scss'] }),
+    babel({
+      babelrc: false,
+      presets: ["es2015-rollup"],
+      exclude: ['node_modules/**'],
+      plugins: [
+        ["transform-react-jsx", { pragma: "h" }],
+        ["transform-object-rest-spread"],
+      ]
+    })
   ],
   onwarn: function (message) {
     if (/Use of `eval` \(in .*\/node_modules\/firebase\/.*\) is strongly discouraged/.test(message)) {

@@ -1,4 +1,4 @@
-import { database } from '../helpers/fire'
+import { database } from '../helpers/firebase'
 const browses = database.ref('browses')
 
 const removeDuplicatesBy = (keyFn, array) => {
