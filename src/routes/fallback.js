@@ -1,6 +1,6 @@
 import { h } from 'hyperapp'
-export default (m,a) =>
+export default () =>
   <fallback->
-    <h1>Ooops are you lost?</h1>
+    <h1>Oops are you lost?</h1>
     <a href='/'>Go back home</a>
   </fallback->

@@ -71,11 +71,11 @@ header {
     margin-top: 1.5rem;
     font-size: calc(1rem + .5vw);
     letter-spacing: .3rem;
-    color: rgba(0,0,0,0.5);
+    color: rgba(0,0,0,.2);
     font-weight: bold;
   }
   span {
-    color: rgba(0,0,0,.1);
+    color: rgba(0,0,0,.05);
   }
 }
 

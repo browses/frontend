@@ -1,34 +1,27 @@
-import FBSDK from 'fb-sdk';
-import firebase from 'firebase'
+import FBSDK from 'fb-sdk'
+import auth from 'firebase/auth'
 
 const Facebook = FBSDK({
   appId: '1659456037715738',
   status: true,
   version: 'v2.7',
-});
+})
 
 export const getFacebookUser = () =>
 new Promise((resolve, reject) => {
   Facebook.getLoginStatus(response => {
-    if (response.status === 'connected') resolve(response);
-    else reject(response);
-  });
-});
+    if (response.status === 'connected') resolve(response)
+    else reject(response)
+  })
+})
 
 export const getFirebaseUser = fbUser =>
-new Promise((resolve, reject) => {
-  const credential = firebase.auth.FacebookAuthProvider.credential(fbUser.authResponse.accessToken);
-  firebase.auth()
-  .signInWithCredential(credential)
-  .then(resolve)
-  .catch(reject);
-});
+  auth().signInWithCredential(
+    auth.FacebookAuthProvider
+    .credential(fbUser.authResponse.accessToken)
+  )
 
-export const getBrowsesUser = () =>
-  getFacebookUser()
-  .then(getFirebaseUser);
-
-export default (options) => ({
+export default () => ({
   model: {
     user: {}
   },
@@ -37,7 +30,8 @@ export default (options) => ({
       set: (m,d) => ({
         user: d,
       }),
-      auth: (m,d,a) => getBrowsesUser()
+      auth: (m,d,a) => getFacebookUser()
+        .then(getFirebaseUser)
         .then(user => a.user.set({
           displayName: user.displayName,
           photoURL: user.providerData[0].photoURL,
@@ -49,7 +43,4 @@ export default (options) => ({
   subscriptions: [
     (m,a) => a.user.auth(),
   ],
-  hooks: {
-    onUpdate: (oldm, newm) => console.log(newm)
-  }
 })

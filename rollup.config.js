@@ -1,36 +1,21 @@
-// Rollup plugins
-import babel from 'rollup-plugin-babel';
-import eslint from 'rollup-plugin-eslint';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import uglify from 'rollup-plugin-uglify';
-import postcss from 'rollup-plugin-postcss';
-import jsx from 'rollup-plugin-jsx';
-
-// PostCSS plugins
-import nested from 'postcss-nested';
+import babel from 'rollup-plugin-babel'
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
 
 export default {
-  entry: 'src/index.js',
-  dest: 'build/bundle.js',
+  entry: 'src/app.js',
+  dest: 'dist/index.js',
   format: 'iife',
   sourceMap: 'inline',
   useStrict: false,
   plugins: [
-    postcss({
-      plugins: [nested()],
-      extensions: ['.scss'],
-    }),
-    resolve({
-      module: true,
-      jsnext: true,
-      main: true,
-      browser: true,
-      extensions: ['.js']
-    }),
     commonjs(),
-    eslint({ exclude: ['src/**/*.scss'] }),
+    resolve({ jsnext: true }),
     babel({ exclude: ['node_modules/**', 'src/**/*.scss'] }),
-    (process.env.NODE_ENV === 'production' && uglify()),
   ],
+  onwarn: function (message) {
+    if (/Use of `eval` \(in .*\/node_modules\/firebase\/.*\) is strongly discouraged/.test(message)) {
+      return
+    }
+  },
 };

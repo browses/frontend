@@ -1,4 +1,4 @@
-import { h, app, Router } from 'hyperapp'
+import { app, Router } from 'hyperapp'
 
 // Routable Views
 import Default from './routes/default'
@@ -7,16 +7,18 @@ import Fallback from './routes/fallback'
 import Browses from './plugins/browses'
 import Browse from './plugins/browse'
 import User from './plugins/user'
+import Fetcher from './plugins/fetcher'
 
 app({
   root: document.querySelector('main'),
   view: {
-    '/': [Default, (m,a) => a.browses.set(0)],
-    '/:id': [Default, (m,a) => a.browses.set(m.router.params.id)],
-    '*': [Fallback],
+    '/': Default,
+    '/:id': Default,
+    '*': Fallback,
   },
   plugins: [
     Router,
+    Fetcher,
     Browses,
     Browse,
     User,

@@ -1,15 +1,5 @@
-import firebase from 'firebase'
-
-firebase.initializeApp({
-  apiKey: 'AIzaSyDf0B5peKIIXbamijhyJjqtJtv6LsYiQIQ',
-  authDomain: 'browses-ef3f0.firebaseapp.com',
-  databaseURL: 'https://browses-ef3f0.firebaseio.com',
-  storageBucket: 'browses-ef3f0.appspot.com',
-  messagingSenderId: '685716734453'
-})
-
-const database = firebase.database()
-const storage = firebase.storage().ref()
+import { database } from '../helpers/fire'
+const browses = database.ref('browses')
 
 const removeDuplicatesBy = (keyFn, array) => {
   var mySet = new Set()
@@ -21,46 +11,59 @@ const removeDuplicatesBy = (keyFn, array) => {
 }
 
 const getUserBrowses = (id, start) => {
-  const next = start && start.key;
+  const next = start && start.key
   if (next) {
-    return database.ref('browses')
+    return browses
     .orderByChild('browser')
     .startAt(id)
     .endAt(id, next)
     .limitToLast(5)
-    .once('value');
+    .once('value')
   }
-  return database.ref('browses')
+  return browses
   .orderByChild('browser')
   .equalTo(id)
   .limitToLast(5)
-  .once('value');
+  .once('value')
 }
 
 const getLatestBrowses = start => {
-  const next = start && start.published;
+  const next = start && start.published
   if (next) {
-    return database.ref('browses')
+    return browses
     .orderByChild('published')
     .endAt(next)
     .limitToLast(5)
-    .once('value');
+    .once('value')
   }
-  return database.ref('browses')
+  return browses
   .limitToLast(5)
-  .once('value');
+  .once('value')
 }
 
-export default (options) => ({
+export default () => ({
   model: {
     browses: {
       list: [],
-      filter: 0,
-      filters: ['Most Recent', 'Most Popular'],
+      filter: 0
     },
   },
   actions: {
     browses: {
+      clear: (m) => ({
+        browses: { ...m.browses,
+          list: [],
+        }}),
+      filter: (m,d) => ({
+        browses: { ...m.browses,
+          filter: d,
+        }}),
+      fetch: (m) => {
+        const filter = m.browses.filter
+        const start = [...m.browses.list].pop()
+        if(filter === 0) return getLatestBrowses(start)
+        return getUserBrowses(filter, start)
+      },
       set: (m,d,a) => {
         a.browses.clear()
         a.browses.filter(d)
@@ -69,19 +72,13 @@ export default (options) => ({
           a.browses.add(b.val())
         ))
       },
-      fetch: (m,d,a) => {
-        const filter = m.browses.filter
-        const start = [...m.browses.list].pop()
-        if(filter === 0) return getLatestBrowses(start);
-        return getUserBrowses(filter, start);
-      },
       add: (m,d) => ({
         browses: { ...m.browses,
           list: removeDuplicatesBy(x => x.key,
             m.browses.list.concat(d).sort((a, b) => {
-              if (a.published > b.published) return -1;
-              if (a.published < b.published) return 1;
-              return 0;
+              if (a.published > b.published) return -1
+              if (a.published < b.published) return 1
+              return 0
             })),
         }}),
       remove: (m,d) => ({
@@ -90,29 +87,28 @@ export default (options) => ({
             x => x.key !== d
           )
         }}),
-      filter: (m,d) => ({
-        browses: { ...m.browses,
-          filter: d,
-        }}),
-      clear: (m,d) => ({
-        browses: { ...m.browses,
-          list: [],
-        }}),
-      browse: (m,d) => ({
+      view: (m,d) => ({
         browses: { ...m.browses,
           list: m.browses.list.map(x => {
-            if(x.key === d) x.browsers = Object.assign({}, x.browsers, {
+            if(x.key === d) x.browsers = {
+              ...x.browsers,
               [m.user.fbid]: true
-            })
+            }
             return x
           })
         }}),
     },
   },
   subscriptions: [
-    (m,a) => a.browses.set(m.router.params.id || 0),
     (m,a) =>
-      window.onscroll = (e) => {
+      a.browses.set(m.router.params.id || 0),
+    (_,a) =>
+      browses.limitToLast(1).on('value',
+      browses => browses.forEach(b =>
+        a.browses.add(b.val())
+      )),
+    (_,a) =>
+      window.onscroll = () => {
         if(document.body.scrollTop > 0 &&
           (window.innerHeight + window.scrollY) >=
           document.body.scrollHeight) {
