@@ -1,14 +1,9 @@
 import { database } from '../helpers/firebase'
 const browses = database.ref('browses')
 
-const removeDuplicatesBy = (keyFn, array) => {
-  var mySet = new Set()
-  return array.filter(function(x) {
-    var key = keyFn(x), isNew = !mySet.has(key)
-    if (isNew) mySet.add(key)
-    return isNew
-  })
-}
+const filterByKey = (o,y) => Object.keys(o).filter(x => x !== y).reduce((r, k) => (r[k] = o[k], r), {})
+const sortByKeyDesc = o => Object.keys(o).sort().reverse().reduce((r, k) => (r[k] = o[k], r), {})
+const lastItem = o => o[Object.keys(o)[Object.keys(o).length - 1]]
 
 const getUserBrowses = (id, start) => {
   const next = start && start.key
@@ -44,7 +39,7 @@ const getLatestBrowses = start => {
 export default () => ({
   model: {
     browses: {
-      list: [],
+      list: {},
       filter: 0
     },
   },
@@ -52,15 +47,21 @@ export default () => ({
     browses: {
       clear: (m) => ({
         browses: { ...m.browses,
-          list: [],
+          list: {},
         }}),
       filter: (m,d) => ({
         browses: { ...m.browses,
           filter: d,
         }}),
+      add: (m,d) => ({
+        browses: { ...m.browses,
+          list: sortByKeyDesc({ ...m.browses.list,
+            [d.key]: d.val()
+          })
+        }}),
       fetch: (m) => {
         const filter = m.browses.filter
-        const start = [...m.browses.list].pop()
+        const start = lastItem(m.browses.list)
         if(filter === 0) return getLatestBrowses(start)
         return getUserBrowses(filter, start)
       },
@@ -68,34 +69,21 @@ export default () => ({
         a.browses.clear()
         a.browses.filter(d)
         a.browses.fetch()
-        .then(browses => browses.forEach(b =>
-          a.browses.add(b.val())
-        ))
+        .then(browses => browses.forEach(a.browses.add))
       },
-      add: (m,d) => ({
-        browses: { ...m.browses,
-          list: removeDuplicatesBy(x => x.key,
-            m.browses.list.concat(d).sort((a, b) => {
-              if (a.published > b.published) return -1
-              if (a.published < b.published) return 1
-              return 0
-            })),
-        }}),
       remove: (m,d) => ({
         browses: { ...m.browses,
-          list: m.browses.list.filter(
-            x => x.key !== d
-          )
+          list: filterByKey(m.browses.list, d)
         }}),
       view: (m,d) => ({
         browses: { ...m.browses,
-          list: m.browses.list.map(x => {
-            if(x.key === d) x.browsers = {
-              ...x.browsers,
-              [m.user.fbid]: true
+          list: { ...m.browses.list,
+            [d]: { ...m.browses.list[d],
+              browsers: { ...m.browses.list[d].browsers,
+                [m.user.fbid]: true
+              }
             }
-            return x
-          })
+          }
         }}),
     },
   },
@@ -104,18 +92,14 @@ export default () => ({
       a.browses.set(m.router.params.id || 0),
     (_,a) =>
       browses.limitToLast(1).on('value',
-      browses => browses.forEach(b =>
-        a.browses.add(b.val())
-      )),
+      browses => browses.forEach(a.browses.add)),
     (_,a) =>
       window.onscroll = () => {
         if(document.body.scrollTop > 0 &&
           (window.innerHeight + window.scrollY) >=
           document.body.scrollHeight) {
           a.browses.fetch()
-          .then(browses => browses.forEach(b =>
-            a.browses.add(b.val())
-          ))
+          .then(browses => browses.forEach(a.browses.add))
         }
       },
   ],
