@@ -22,15 +22,15 @@ export const getFirebaseUser = fbUser =>
   )
 
 export default () => ({
-  model: {
+  state: {
     user: {}
   },
   actions: {
     user: {
-      set: (m,d) => ({
+      set: (m,a,d) => ({
         user: d,
       }),
-      auth: (m,d,a) => getFacebookUser()
+      auth: (m,a,d) => getFacebookUser()
         .then(getFirebaseUser)
         .then(user => a.user.set({
           displayName: user.displayName,
@@ -40,7 +40,7 @@ export default () => ({
         }))
     },
   },
-  subscriptions: [
-    (m,a) => a.user.auth(),
-  ],
+  events: {
+    loaded: (m,a) => a.user.auth(),
+  },
 })
