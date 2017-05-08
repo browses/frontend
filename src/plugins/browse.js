@@ -2,7 +2,7 @@ import { database } from '../helpers/firebase'
 export default () => ({
   actions: {
     browse: {
-      view: (m,d,a) => {
+      view: (m,a,d) => {
         database.ref(`browses/${d}/views`)
         .transaction(views => views ? views + 1 : 1)
         .catch(console.log)
@@ -11,7 +11,7 @@ export default () => ({
         .then(a.browses.view(d))
         .catch(console.log)
       },
-      delete: (m,d,a) => {
+      delete: (m,a,d) => {
         if(confirm('Delete this browse forever?')) {
           database.ref(`browses/${d}`).remove()
           .then(a.browses.remove(d))

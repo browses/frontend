@@ -91,10 +91,10 @@ export default () => ({
   },
   events: {
     loaded: [
-      (_,a) =>
-        browses.limitToLast(1).on('value',
-          browses => browses.forEach(a.browses.add)
-        ),
+      // (_,a) =>
+      //   browses.limitToLast(1).on('value',
+      //     browses => browses.forEach(a.browses.add)
+      //   ),
       (_,a) =>
         window.onscroll = () => {
           if(document.body.scrollTop > 0 &&
