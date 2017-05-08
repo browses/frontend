@@ -37,7 +37,7 @@ const getLatestBrowses = start => {
 }
 
 export default () => ({
-  model: {
+  state: {
     browses: {
       list: {},
       filter: 0
@@ -49,11 +49,11 @@ export default () => ({
         browses: { ...m.browses,
           list: {},
         }}),
-      filter: (m,d) => ({
+      filter: (m,a,d) => ({
         browses: { ...m.browses,
           filter: d,
         }}),
-      add: (m,d) => ({
+      add: (m,a,d) => ({
         browses: { ...m.browses,
           list: sortByKeyDesc({ ...m.browses.list,
             [d.key]: d.val()
@@ -65,17 +65,19 @@ export default () => ({
         if(filter === 0) return getLatestBrowses(start)
         return getUserBrowses(filter, start)
       },
-      set: (m,d,a) => {
+      set: (m,a,d) => {
         a.browses.clear()
         a.browses.filter(d)
         a.browses.fetch()
-        .then(browses => browses.forEach(a.browses.add))
+        .then(browses => browses.forEach(
+          a.browses.add
+        ))
       },
-      remove: (m,d) => ({
+      remove: (m,a,d) => ({
         browses: { ...m.browses,
           list: filterByKey(m.browses.list, d)
         }}),
-      view: (m,d) => ({
+      view: (m,a,d) => ({
         browses: { ...m.browses,
           list: { ...m.browses.list,
             [d]: { ...m.browses.list[d],
@@ -87,20 +89,21 @@ export default () => ({
         }}),
     },
   },
-  subscriptions: [
-    (m,a) =>
-      a.browses.set(m.router.params.id || 0),
-    (_,a) =>
-      browses.limitToLast(1).on('value',
-      browses => browses.forEach(a.browses.add)),
-    (_,a) =>
-      window.onscroll = () => {
-        if(document.body.scrollTop > 0 &&
-          (window.innerHeight + window.scrollY) >=
-          document.body.scrollHeight) {
-          a.browses.fetch()
-          .then(browses => browses.forEach(a.browses.add))
-        }
-      },
-  ],
+  events: {
+    loaded: [
+      (_,a) =>
+        browses.limitToLast(1).on('value',
+          browses => browses.forEach(a.browses.add)
+        ),
+      (_,a) =>
+        window.onscroll = () => {
+          if(document.body.scrollTop > 0 &&
+            (window.innerHeight + window.scrollY) >=
+            document.body.scrollHeight) {
+            a.browses.fetch()
+            .then(browses => browses.forEach(a.browses.add))
+          }
+        },
+    ]
+  },
 })
