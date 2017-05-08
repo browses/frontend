@@ -7,18 +7,21 @@ import Fallback from './routes/fallback'
 import Browses from './plugins/browses'
 import Browse from './plugins/browse'
 import User from './plugins/user'
-import Fetcher from './plugins/fetcher'
+import Linker from './plugins/linker'
 
 app({
-  root: document.querySelector('main'),
   view: {
     '/': Default,
     '/:id': Default,
     '*': Fallback,
   },
+  events: {
+    route: (m,a,d) =>
+      a.browses.set(d.params.id || 0),
+  },
   plugins: [
     Router,
-    Fetcher,
+    Linker,
     Browses,
     Browse,
     User,
