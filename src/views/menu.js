@@ -7,14 +7,14 @@ export default ({m}) =>
       </svg>
     </a>
     { m.user.fbid ?
-      <a className='user' href={'/'+m.user.fbid}>
+      <a class='user' href={'/'+m.user.fbid}>
         <name->{m.user.displayName}</name->
         <avatar->
           <img src={m.user.photoURL} />
         </avatar->
       </a> :
       <button
-        className='install'
+        class='install'
         onclick={() => chrome.webstore.install('fpijpjkcpkhbkeiinkphbiaapekmfgdo')}
       >+ Add to Chrome</button>
     }
