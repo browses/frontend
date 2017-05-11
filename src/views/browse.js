@@ -18,7 +18,9 @@ export default ({user, browse, a}) =>
       <col->
         <title->{browse.title}</title->
         <row->
-          <browsers->{ Object.keys(browse.browsers || {}).map(id =>
+          <browsers->{ Object.keys(browse.browsers || {})
+          .filter(id => id !== browse.browser)
+          .map(id =>
             <a href={'/'+id}>
               <img src={`https://graph.facebook.com/${id}/picture?type=square`} />
             </a>
