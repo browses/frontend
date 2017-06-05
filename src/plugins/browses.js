@@ -59,6 +59,8 @@ export default () => ({
     },
   },
   events: {
+    route: (m,a,d) =>
+      a.browses.set(d.params.id || 0),
     loaded: [
       (_,a) =>
         browses.limitToLast(1).on('value', a.browses.topup),

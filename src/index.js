@@ -15,10 +15,6 @@ app({
     '/:id': Default,
     '*': Fallback,
   },
-  events: {
-    route: (m,a,d) =>
-      a.browses.set(d.params.id || 0),
-  },
   plugins: [
     Router,
     Linker,
