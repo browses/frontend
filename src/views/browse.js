@@ -45,7 +45,7 @@ const DeleteBrowseButton = ({
 const Row = xs => h('row-', {}, xs)
 const Col = xs => h('col-', {}, xs)
 const Meta = xs => h('meta-', {}, xs)
-const Browse = xs => h('browse-', {}, xs)
+const Browse = (key,xs) => h('browse-', {}, xs)
 const Title = text => h('title-', {}, text)
 const TimeSince = time => h('time-', {}, timeSince(time))
 
@@ -54,7 +54,7 @@ export default ({
   a = {},
   browse = {},
 }) =>
-Browse([
+Browse(browse.key, [
   Screenshot({ ...browse, a }),
   Meta([
     FacebookAvatar(browse.browser),
