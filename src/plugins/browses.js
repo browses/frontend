@@ -5,36 +5,18 @@ const filterByKey = (o,y) => Object.keys(o).filter(x => x !== y).reduce((r, k) =
 const sortByKeyDesc = o => Object.keys(o).sort().reverse().reduce((r, k) => (r[k] = o[k], r), {})
 const lastItem = o => o[Object.keys(o)[Object.keys(o).length - 1]]
 
-const getUserBrowses = (id, start) => {
-  const next = start && start.key
-  if (next) {
-    return browses
-    .orderByChild('browser')
-    .startAt(id)
-    .endAt(id, next)
-    .limitToLast(5)
-    .once('value')
-  }
-  return browses
-  .orderByChild('browser')
-  .equalTo(id)
-  .limitToLast(5)
-  .once('value')
-}
+const getUsersBrowses = id => browses.orderByChild('browser').equalTo(id).limitToLast(5).once('value')
+const getUsersBrowsesFrom = id => next => browses.orderByChild('browser').startAt(id).endAt(id, next).limitToLast(5).once('value')
+const getRecentBrowses = _ => browses.limitToLast(5).once('value')
+const getRecentBrowsesFrom = next => browses.orderByChild('published').endAt(next).limitToLast(5).once('value')
 
-const getLatestBrowses = start => {
-  const next = start && start.published
-  if (next) {
-    return browses
-    .orderByChild('published')
-    .endAt(next)
-    .limitToLast(5)
-    .once('value')
-  }
-  return browses
-  .limitToLast(5)
-  .once('value')
-}
+const getUserBrowses = (id, start) => start && start.key
+  ? getUsersBrowsesFrom(id)(start.key)
+  : getUsersBrowses(id)
+
+const getLatestBrowses = start => start && start.published
+  ? getRecentBrowsesFrom(start.published)
+  : getRecentBrowses()
 
 export default () => ({
   state: {
