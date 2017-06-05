@@ -3,9 +3,6 @@ export default () => ({
   actions: {
     browse: {
       view: (m,a,d) => {
-        database.ref(`browses/${d}/views`)
-        .transaction(views => views ? views + 1 : 1)
-        .catch(console.log)
         database.ref(`browses/${d}/browsers`)
         .transaction(browsers => ({ ...browsers, [m.user.fbid]: true }))
         .then(a.browses.view(d))
