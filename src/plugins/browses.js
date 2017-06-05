@@ -27,34 +27,21 @@ export default () => ({
   },
   actions: {
     browses: {
-      clear: (m) => ({
-        browses: { ...m.browses,
-          list: {},
-        }}),
-      filter: (m,a,d) => ({
-        browses: { ...m.browses,
-          filter: d,
-        }}),
-      add: (m,a,d) => ({
-        browses: { ...m.browses,
-          list: sortByKeyDesc({ ...m.browses.list,
-            [d.key]: d.val()
-          })
-        }}),
-      fetch: (m) => {
-        const filter = m.browses.filter
-        const start = lastItem(m.browses.list)
-        if(filter === 0) return getLatestBrowses(start)
-        return getUserBrowses(filter, start)
-      },
+      fetch: (m,a) => m.browses.filter === 0
+        ? getLatestBrowses(lastItem(m.browses.list)).then(a.browses.add)
+        : getUserBrowses(m.browses.filter, lastItem(m.browses.list)).then(a.browses.add),
       set: (m,a,d) => {
         a.browses.clear()
         a.browses.filter(d)
         a.browses.fetch()
-        .then(browses => browses.forEach(
-          a.browses.add
-        ))
       },
+      clear: (m) => ({ browses: { ...m.browses, list: {} }}),
+      filter: (m,a,d) => ({ browses: { ...m.browses, filter: d }}),
+      topup: (s,a,d) => s.browses.filter === 0 ? a.browses.add(d) : null,
+      add: (m,a,d) => ({
+        browses: { ...m.browses,
+          list: sortByKeyDesc({ ...m.browses.list, ...d.val() })
+        }}),
       remove: (m,a,d) => ({
         browses: { ...m.browses,
           list: filterByKey(m.browses.list, d)
@@ -73,17 +60,14 @@ export default () => ({
   },
   events: {
     loaded: [
-      // (_,a) =>
-      //   browses.limitToLast(1).on('value',
-      //     browses => browses.forEach(a.browses.add)
-      //   ),
+      (_,a) =>
+        browses.limitToLast(1).on('value', a.browses.topup),
       (_,a) =>
         window.onscroll = () => {
           if(document.body.scrollTop > 0 &&
             (window.innerHeight + window.scrollY) >=
             document.body.scrollHeight) {
             a.browses.fetch()
-            .then(browses => browses.forEach(a.browses.add))
           }
         },
     ]
