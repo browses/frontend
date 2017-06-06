@@ -19,7 +19,7 @@ img {
 }
 
 html {
-  font-size: calc(10px + 1vmin);
+  font-size: calc(8px + 2vmin);
   font-family: sans-serif;
   overflow-y: scroll;
 }
@@ -45,6 +45,7 @@ nav {
     > *+* { margin-left: 1rem; }
     avatar- {
       width: 2.5rem;
+      img { border-radius: 50%; }
     }
   }
   .install {
@@ -107,6 +108,7 @@ browse- {
 
   .avatar {
     width: 3.6rem;
+    border-radius: 50%;
   }
 
   meta- {
@@ -126,7 +128,7 @@ browse- {
   row- {
     display: flex;
     align-items: center;
-    > *:not(:empty)+* { margin-left: .25rem; }
+    > *:not(:empty)+* { margin-left: .5rem; }
   }
 
   time- {
