@@ -7,19 +7,19 @@ export default ({m,a}) =>
       </svg>
     </a>
     {
-      m.user.fbid &&
-      <a class='user' href={'/'+m.user.fbid}>
-        <name->{m.user.displayName}</name->
-        <avatar->
-          <img src={m.user.photoURL} />
-        </avatar->
-      </a>
-    }{
-      m.extension.isInstalled !== true
-      ? <button
+      m.user.fbid
+      ? <a class='user' href={'/'+m.user.fbid}>
+          <name->{m.user.displayName}</name->
+          <avatar->
+            <img src={m.user.photoURL} />
+          </avatar->
+        </a>
+      : <button
           class='install'
-          onclick={a.extension.install}
+          onclick={ _ => chrome.webstore.install('',
+            (d) => console.log('installed: ' + d),
+            (e) => console.log('not installed: ' + e)
+          )}
         >+ Add to Chrome</button>
-      : ''
     }
   </nav>

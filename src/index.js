@@ -8,7 +8,6 @@ import Browses from './plugins/browses'
 import Browse from './plugins/browse'
 import User from './plugins/user'
 import Linker from './plugins/linker'
-import Extension from './plugins/extension'
 
 app({
   view: {
@@ -22,6 +21,5 @@ app({
     Browses,
     Browse,
     User,
-    Extension,
   ],
 })
