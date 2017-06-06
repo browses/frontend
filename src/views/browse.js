@@ -13,7 +13,7 @@ const FacebookAvatar = id =>
   h('a', { href: '/' + id }, [
     h('img', {
       class: 'avatar',
-      src: `https://graph.facebook.com/${id}/picture?type=square`,
+      src: `https://graph.facebook.com/${id}/picture?type=large`,
     })
   ])
 
