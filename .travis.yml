@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- "7"
+
+script: npm run build
+env:
+  global:
+  - ENCRYPTION_LABEL: "1b2ba3041f6a"
+  - COMMIT_AUTHOR_EMAIL: "lukejacksonn@gmail.com"
+
+deploy:
+  local_dir: dist
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master

@@ -10,7 +10,7 @@ export default {
     resolve({ jsnext: true }),
     babel({
       babelrc: false,
-      presets: ["es2015-rollup"],
+      presets: ['es2015-rollup'],
       exclude: ['node_modules/**'],
       plugins: [
         ["transform-react-jsx", { pragma: "h" }],
