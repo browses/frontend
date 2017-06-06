@@ -37,7 +37,7 @@
     "static": "copyfiles -f static/* dist",
     "script": "rollup -c",
     "style": "node-sass -q src/index.css -o dist",
-    "deploy": "npm run static && npm run script && npm run style && npm run uglify",
+    "build": "npm run static && npm run script && npm run style && npm run uglify",
     "serve": "http-server-spa dist",
     "uglify": "npm run uglifyjs && npm run uglifycss",
     "uglifyjs": "uglifyjs --screw-ie8 -c -m -o dist/index.js -- dist/index.js",
