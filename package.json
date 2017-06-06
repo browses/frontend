@@ -60,7 +60,7 @@
     "uglifycss": "0.0.25"
   },
   "dependencies": {
-    "fb-sdk": "^1.0.3",
+    "fb-sdk": "1.0.3",
     "firebase": "3.5.2",
     "hyperapp": "^0.9.0"
   },
