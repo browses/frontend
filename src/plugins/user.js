@@ -12,14 +12,14 @@ new Promise((resolve, reject) => {
   Facebook.getLoginStatus(response => {
     if (response.status === 'connected') resolve(response)
     else reject(response)
-  })
+  }).catch(console.log)
 })
 
 export const getFirebaseUser = fbUser =>
   auth().signInWithCredential(
     auth.FacebookAuthProvider
     .credential(fbUser.authResponse.accessToken)
-  )
+  ).catch(console.log)
 
 export default () => ({
   state: {
@@ -37,7 +37,7 @@ export default () => ({
           photoURL: user.providerData[0].photoURL,
           uid: user.uid,
           fbid: user.providerData[0].uid,
-        }))
+        })).catch(console.log)
     },
   },
   events: {
