@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "watch": {
-    "index": {
+    "static": {
       "patterns": [
-        "src"
+        "static"
       ],
-      "extensions": "html",
+      "extensions": "*",
       "quiet": true
     },
     "script": {
@@ -34,15 +34,15 @@
   },
   "scripts": {
     "make": "run(){ cp make/$1.js src/$1s/_$2.js; }; run",
-    "index": "copyfiles -f src/index.html dist",
+    "static": "copyfiles -f static/* dist",
     "script": "rollup -c",
     "style": "node-sass -q src/index.css -o dist",
-    "deploy": "npm run index && npm run script && npm run style && npm run uglify",
+    "deploy": "npm run static && npm run script && npm run style && npm run uglify",
     "serve": "http-server-spa dist",
     "uglify": "npm run uglifyjs && npm run uglifycss",
     "uglifyjs": "uglifyjs --screw-ie8 -c -m -o dist/index.js -- dist/index.js",
     "uglifycss": "echo `uglifycss dist/index.css` > dist/index.css",
-    "start": "npm run index && npm-watch"
+    "start": "npm run static && npm-watch"
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
