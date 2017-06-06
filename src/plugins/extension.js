@@ -8,12 +8,13 @@ export default () => ({
     extension: {
       setIsInstalled: (s,a,d) => ({ extension: { isInstalled: d } }),
       install: (s,a) => chrome.webstore.install('',
-        (d) => a.setIsInstalled(true),
+        (d) => a.extension.setIsInstalled(true),
         (e) => console.log('not installed: '+ e)
       )
     },
   },
   events: {
+    update: console.log,
     loaded: [
       (s,a) => chrome.app.isInstalled
         ? a.extension.setIsInstalled(true)

@@ -15,10 +15,11 @@ export default ({m,a}) =>
         </avatar->
       </a>
     }{
-      !m.extension.isInstalled &&
-        <button
+      m.extension.isInstalled !== true
+      ? <button
           class='install'
           onclick={a.extension.install}
         >+ Add to Chrome</button>
+      : ''
     }
   </nav>
