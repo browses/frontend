@@ -37,7 +37,7 @@
     "index": "copyfiles -f src/index.html dist",
     "script": "rollup -c",
     "style": "node-sass -q src/index.css -o dist",
-    "build": "npm run index && npm run script && npm run style && npm run uglify",
+    "deploy": "npm run index && npm run script && npm run style && npm run uglify",
     "serve": "http-server-spa dist",
     "uglify": "npm run uglifyjs && npm run uglifycss",
     "uglifyjs": "uglifyjs --screw-ie8 -c -m -o dist/index.js -- dist/index.js",
