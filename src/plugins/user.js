@@ -30,6 +30,10 @@ export default () => ({
       set: (m,a,d) => ({
         user: d,
       }),
+      login: (m,a,d) => window.location.assign('https://www.facebook.com/dialog/oauth' +
+        '?client_id=1659456037715738&response_type=token' +
+        '&redirect_uri=https://browses.io' +
+        '&scope=user_friends'),
       auth: (m,a,d) => getFacebookUser()
         .then(getFirebaseUser)
         .then(user => a.user.set({

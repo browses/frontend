@@ -27,32 +27,35 @@ html {
 nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 1.5rem;
   border-bottom: 1px solid rgba(0,0,0,.1);
-  row- {
-    display: flex;
-    align-items: center;
-    > *+* { margin-left: 1rem; }
+  > *+* { margin-left: .5rem; }
+  .icon {
+    margin-right: auto;
+    svg {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
   }
-  svg {
-    width: 2.5rem;
-    height: 2.5rem;
+  button {
+    outline: none;
+    padding: .75rem;
+    border: 1px solid rgba(0,0,0,.1);
+    background: #fff;
+    font-size: .75rem;
+    cursor: pointer;
   }
   .user {
     display: flex;
     align-items: center;
-    > *+* { margin-left: 1rem; }
-    avatar- {
-      width: 2.5rem;
-      img { border-radius: 50%; }
+    text-decoration: none;
+    font-size: .62rem;
+    font-weight: bold;
+    > *+* { margin-left: .75rem; }
+    img {
+      width: 1rem;
+      border-radius: 50%;
     }
-  }
-  .install {
-    padding: .68rem;
-    border: 1px solid rgba(0,0,0,.1);
-    background: #fff;
-    font-size: .68rem;
   }
 }
 
