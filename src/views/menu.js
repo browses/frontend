@@ -7,7 +7,7 @@ export default ({m,a}) =>
       </svg>
     </a>
     {
-      chrome && !m.extension.isInstalled &&
+      window.chrome && !m.extension.isInstalled &&
         <button class='install' onclick={a.extension.install}>
           Install Extension
         </button>
