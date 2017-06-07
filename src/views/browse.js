@@ -10,11 +10,8 @@ const Screenshot = ({ url, image, key, a }) =>
   ])
 
 const FacebookAvatar = id =>
-  h('a', { href: '/' + id }, [
-    h('img', {
-      class: 'avatar',
-      src: `https://graph.facebook.com/${id}/picture?type=large`,
-    })
+  h('a', { class: 'avatar', href: '/' + id }, [
+    h('img', { src: `https://graph.facebook.com/${id}/picture?type=large` })
   ])
 
 const BrowsersAvatarList = ({
