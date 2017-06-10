@@ -100,7 +100,7 @@ browse- {
 
   screenshot- {
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center top;
     background-size: cover;
     background-color: #f2f2f2;
 
@@ -108,7 +108,7 @@ browse- {
       content: '';
       display: block;
       width: 100%;
-      padding-top: 62%;
+      padding-top: 38%;
       box-shadow: 0 1px 5px 1px rgba(0,0,0,0.2);
     }
   }
