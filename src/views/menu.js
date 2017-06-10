@@ -9,7 +9,7 @@ export default ({m,a}) =>
     {
       window.chrome && !m.extension.isInstalled &&
         <button class='install' onclick={a.extension.install}>
-          Install Extension
+          Chrome Extension
         </button>
     }{
       m.user.fbid
@@ -17,6 +17,6 @@ export default ({m,a}) =>
           <text->MY BROWSES</text->
           <img src={m.user.photoURL} />
         </button>
-      : <button class='login' onclick={a.user.login}>Create Account</button>
+      : <button class='login' onclick={a.user.login}>Facebook Login</button>
     }
   </nav>
