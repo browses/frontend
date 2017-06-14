@@ -2,38 +2,14 @@
   "name": "browses-web",
   "version": "1.0.0",
   "main": "src/index.js",
+  "output": "dist",
   "watch": {
-    "static": {
-      "patterns": [
-        "static"
-      ],
-      "extensions": "*",
-      "quiet": true
-    },
-    "script": {
-      "patterns": [
-        "src"
-      ],
-      "extensions": "js",
-      "quiet": true
-    },
-    "style": {
-      "patterns": [
-        "src"
-      ],
-      "extensions": "css",
-      "quiet": true
-    },
-    "serve": {
-      "patterns": [
-        "."
-      ],
-      "extensions": "json",
-      "quiet": true
-    }
+    "static": { "patterns": "static", "extensions": "*", "quiet": true },
+    "script": { "patterns": "src", "extensions": "js", "quiet": true },
+    "style": { "patterns": "src", "extensions": "css", "quiet": true },
+    "serve": { "patterns": "package.json", "quiet": true }
   },
   "scripts": {
-    "make": "run(){ cp make/$1.js src/$1s/_$2.js; }; run",
     "static": "copyfiles -f static/* dist",
     "script": "rollup -c",
     "style": "node-sass -q src/index.css -o dist",
