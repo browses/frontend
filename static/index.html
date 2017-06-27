@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="/index.css">
     <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/fpijpjkcpkhbkeiinkphbiaapekmfgdo">
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script>(function(){
+      var redirect = sessionStorage.redirect
+      delete sessionStorage.redirect
+      if (redirect && redirect != location.href) history.replaceState(null, null, redirect)
+    })()</script>
   </head>
   <body></body>
   <script src='/index.js'></script>

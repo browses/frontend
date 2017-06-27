@@ -11,12 +11,12 @@ import Linker from './plugins/linker'
 import Extension from './plugins/extension'
 
 app({
-  view: {
-    '/': Default,
-    '/:id': Default,
-    '*': Fallback,
-  },
-  plugins: [
+  view: [
+    ['/', Default],
+    ['/:id', Default],
+    ['*', Fallback],
+  ],
+  mixins: [
     Router,
     Linker,
     Browses,

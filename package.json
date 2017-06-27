@@ -4,10 +4,25 @@
   "main": "src/index.js",
   "output": "dist",
   "watch": {
-    "static": { "patterns": "static", "extensions": "*", "quiet": true },
-    "script": { "patterns": "src", "extensions": "js", "quiet": true },
-    "style": { "patterns": "src", "extensions": "css", "quiet": true },
-    "serve": { "patterns": "package.json", "quiet": true }
+    "static": {
+      "patterns": "static",
+      "extensions": "*",
+      "quiet": true
+    },
+    "script": {
+      "patterns": "src",
+      "extensions": "js",
+      "quiet": true
+    },
+    "style": {
+      "patterns": "src",
+      "extensions": "css",
+      "quiet": true
+    },
+    "serve": {
+      "patterns": "package.json",
+      "quiet": true
+    }
   },
   "scripts": {
     "static": "copyfiles -f static/* dist",
@@ -38,7 +53,7 @@
   "dependencies": {
     "fb-sdk": "1.0.3",
     "firebase": "3.5.2",
-    "hyperapp": "0.9.2"
+    "hyperapp": "^0.9.3"
   },
   "author": "Luke Jackson",
   "license": "MIT"
