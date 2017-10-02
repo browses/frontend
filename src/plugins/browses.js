@@ -1,21 +1,28 @@
 import { database } from '../helpers/firebase'
 const browses = database.ref('browses')
 
+const whitelist = [
+  '10157368805735201',
+  '10154100107713751',
+  '10154055590328075',
+]
+
 const filterByKey = (o,y) => Object.keys(o).filter(x => x !== y).reduce((r, k) => (r[k] = o[k], r), {})
 const sortByKeyDesc = o => Object.keys(o).sort().reverse().reduce((r, k) => (r[k] = o[k], r), {})
 const lastItem = o => o[Object.keys(o)[Object.keys(o).length - 1]]
 
-const getUsersBrowses = id => browses.orderByChild('browser').equalTo(id).limitToLast(5).once('value')
-const getUsersBrowsesFrom = id => next => browses.orderByChild('browser').startAt(id).endAt(id, next).limitToLast(5).once('value')
-const getRecentBrowses = _ => browses.limitToLast(5).once('value')
-const getRecentBrowsesFrom = next => browses.orderByChild('published').endAt(next).limitToLast(5).once('value')
+const getUsersBrowses = id => browses.orderByChild('browser').equalTo(id).limitToLast(5).once('value').then(data => data.val())
+const getUsersBrowsesFrom = id => next => browses.orderByChild('browser').startAt(id).endAt(id, next).limitToLast(5).once('value').then(data => data.val())
+const getRecentBrowses = _ =>
+  Promise.all(whitelist.map(getUsersBrowses))
+  .then(picked => picked.reduce((a,b) => ({ ...a, ...b }), {}))
 
 const getUserBrowses = (id, start) => start && start.key
   ? getUsersBrowsesFrom(id)(start.key)
   : getUsersBrowses(id)
 
 const getLatestBrowses = start => start && start.published
-  ? getRecentBrowsesFrom(start.published)
+  ? Promise.resolve({})
   : getRecentBrowses()
 
 export default () => ({
@@ -40,7 +47,7 @@ export default () => ({
       topup: (s,a,d) => s.browses.filter === 0 ? a.browses.add(d) : null,
       add: (m,a,d) => ({
         browses: { ...m.browses,
-          list: sortByKeyDesc({ ...m.browses.list, ...d.val() })
+          list: sortByKeyDesc({ ...m.browses.list, ...d })
         }}),
       remove: (m,a,d) => ({
         browses: { ...m.browses,
@@ -62,8 +69,6 @@ export default () => ({
     route: (m,a,d) =>
       a.browses.set(d.params.id || 0),
     loaded: [
-      (_,a) =>
-        browses.limitToLast(1).on('value', a.browses.topup),
       (_,a) =>
         window.onscroll = () => {
           if(document.body.scrollTop > 0 &&
